@@ -10,6 +10,7 @@ import (
 	"github.com/go-macaron/toolbox"
 	"github.com/marcelosilva-dev/curso-go-web-avancado/conf"
 	"github.com/marcelosilva-dev/curso-go-web-avancado/handler"
+	"github.com/marcelosilva-dev/curso-go-web-avancado/lib/auth"
 	"github.com/marcelosilva-dev/curso-go-web-avancado/lib/cache"
 	"github.com/marcelosilva-dev/curso-go-web-avancado/lib/contx"
 	"github.com/marcelosilva-dev/curso-go-web-avancado/lib/cors"
@@ -64,9 +65,12 @@ func SetupMiddlewares(app *macaron.Macaron) {
 
 //SetupRoutes defines the routes the Web Application will respond
 func SetupRoutes(app *macaron.Macaron) {
-	app.Get("", handler.IndexCliente)
-	app.Get("/", handler.IndexCliente)
-	app.Post("/alteracliente", binding.Bind(model.Cliente{}), handler.AlteraCliente)
+	app.Get("", auth.LoginRequired, handler.IndexCliente)
+	app.Get("/", auth.LoginRequired, handler.IndexCliente)
+	app.Get("/login", auth.IndexLogin)
+	app.Get("/logout", auth.LogoutForm)
+	app.Post("/checklogin", binding.Bind(auth.User{}), auth.CheckFormUserCredentials)
+	app.Post("/alteracliente", auth.LoginRequired, binding.Bind(model.Cliente{}), handler.AlteraCliente)
 
 	//HealthChecker
 	app.Get("/health", handler.HealthCheck)

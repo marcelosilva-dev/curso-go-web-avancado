@@ -12,7 +12,7 @@ var (
 	Memory = cache.Options{}
 
 	// File Option
-	File   = cache.Options{
+	File = cache.Options{
 		Adapter:       "file",
 		AdapterConfig: conf.Cfg.Section("").Key("cache_adpter_config").Value(),
 	}
