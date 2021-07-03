@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="pt">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Xiboquinha - Gestão de Clientes</title>
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/css/materialize.min.css">
+  <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+</head>
+
+<body>
+  <div class="container">
+    <h1>Gestão de Clientes</h1>
+    <section class="section" id="form">
+      <form action="/alteracliente" method="POST" class="col s12" name="frmCliente" id="frmCliente">
+        <div class="row">
+          <div class="input-field col s12">
+            <input type="number" name="formID" id="formID" class="validate">
+            <label for="formID">ID</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input type="text" name="formNome" id="formNome" class="validate">
+            <label for="formNome">Nome</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s12">
+            <input type="text" name="formCidade" id="formCidade" class="validate">
+            <label for="formCidade">Cidade</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="input-field col s6">
+            <input type="text" maxlength="2" size="4" name="formUF" id="formUF" class="validate">
+            <label for="formUF">UF</label>
+          </div>
+          <div class="input-field col s6">
+            <input type="text" pattern="\d*" maxlength="8" size="10" name="formCEP" id="formCEP" class="validate">
+            <label for="formCEP">CEP</label>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col s6 center-align">
+            <button class="btn waves-effect waves-light" type="submit" name="action">Salvar
+              <i class="material-icons right">send</i>
+            </button>
+          </div>
+          <div class="center-align col s6">
+            <button class="btn waves-effect waves-light blue darken-4" type="reset" name="reset">Limpar Formulário
+              <i class="material-icons right">clear</i>
+            </button>
+          </div>
+        </div>
+      </form>
+    </section>
+    <div class="divider"></div>
+    <section class="section" id="listagem">
+      <h5>Clientes já registrados</h5>
+      <table class="highlight responsive-table">
+        <thead>
+          <tr>
+            <th>Nome</th>
+            <th>Cidade</th>
+            <th>UF</th>
+            <th>CEP</th>
+          </tr>
+        </thead>
+        <tbody>
+          {{ range .clientes}}
+          <tr onclick="carregaDadosNoForm({{.ID}})" id="registro_{{.ID}}">
+            <td data-fieldname="nome">{{.Nome}}</td>
+            <td data-fieldname="cidade">{{.Cidade}}</td>
+            <td data-fieldname="uf">{{.UF}}</td>
+            <td data-fieldname="cep">{{.CEP}}</td>
+          </tr>
+          {{ end }}
+        </tbody>
+      </table>
+    </section>
+  </div>
+  <script src="https://code.jquery.com/jquery-3.5.0.min.js"
+    integrity="sha256-xNzN2a4ltkB44Mc/Jz3pT4iU1cmeR0FkXs4pru/JxaQ=" crossorigin="anonymous"></script>
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/materialize/1.0.0/js/materialize.min.js"></script>
+  <script>
+    function carregaDadosNoForm(id) {
+      const celulas = $('#registro_' + id).find('td')
+      $.each(celulas, (index, celula) => {
+        if (celula.dataset.fieldname === 'nome') {
+          $('#formNome').val(celula.innerHTML)
+        } else if (celula.dataset.fieldname === 'cidade') {
+          $('#formCidade').val(celula.innerHTML)
+        } else if (celula.dataset.fieldname === 'cep') {
+          $('#formCEP').val(celula.innerHTML)
+        } else if (celula.dataset.fieldname === 'uf') {
+          $('#formUF').val(celula.innerHTML)
+        }
+        $('#formID').val(id);
+        $('#formNome').focus();
+        $('#formCidade').focus();
+        $('#formCEP').focus();
+        $('#formUF').focus();
+        $('#formID').focus();
+        console.log(celula.innerHTML, celula.dataset.fieldname);
+      })
+    }
+  </script>
+</body>
+
+</html>
