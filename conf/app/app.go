@@ -72,6 +72,8 @@ func SetupRoutes(app *macaron.Macaron) {
 	app.Post("/checklogin", binding.Bind(auth.User{}), auth.CheckFormUserCredentials)
 	app.Post("/alteracliente", auth.LoginRequired, binding.Bind(model.Cliente{}), handler.AlteraCliente)
 
+	app.Get("/3D", auth.LoginRequired, handler.Ver3D)
+
 	//HealthChecker
 	app.Get("/health", handler.HealthCheck)
 
